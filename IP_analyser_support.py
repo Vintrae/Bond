@@ -10,8 +10,11 @@ import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+from pprint import pprint
+import json
 
 import IP_analyser
+import ip_apis
 
 def main(*args):
     '''Main entry point for the application.'''
@@ -29,13 +32,34 @@ def print(*args):
     for arg in args:
         print ('another arg:', arg)
     sys.stdout.flush()
-
-def print(*args):
-    print('IP_analyser_support.print')
-    for arg in args:
-        print ('another arg:', arg)
-    sys.stdout.flush()
-
+    
+def analyse_button(text, tab, treeview):
+    ip_list = text.get("1.0", tk.END)
+    ip_list = ip_list.split('\n')
+    while '' in ip_list:
+        ip_list.remove('')
+    
+    ip_list = [ip.replace("[.]", ".") for ip in ip_list]
+        
+    vt_queued_domains = ip_apis.vt_domain_scan(ip_list)
+    vt_domain_report = ip_apis.vt_results(vt_queued_domains)
+    
+    index = 0
+    for result in vt_domain_report:
+        treeview.insert('', "end", str(index), text=result['resource'], values=("{}/{}".format(result['positives'], result['total'])))
+        for scan in result['scans']:
+            # Create tag for colouring purposes.
+            tag = None
+            if result['scans'][scan]['detected']:
+                tag = 'red'
+            else:
+                tag = 'green'
+            treeview.insert(str(index), "end", tags=(tag), text=scan, values=(str(result['scans'][scan]['detected'])))
+        index += 1
+    treeview.tag_configure('red', background="#ff867d")
+    treeview.tag_configure('green', background="#a4ff91")
+            
+    tab.tab(1, state="normal")
 if __name__ == '__main__':
     IP_analyser.start_up()
 
