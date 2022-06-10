@@ -9,13 +9,6 @@ import sys
 
 from pprint import pprint
 
-# Import list of IP addresses to analyse.
-# if len(sys.argv) < 2:
-    # sys.exit("No IP address or file supplied. Use" \
-    # "'python ip_analyser.py help' for more information.")
-# elif sys.argv[1].lower() == "help":
-    # print("Help is WIP.")
-
 # Import API keys as environment variables.
 VT_APIKEY = os.getenv('VT_API_KEY')
 if VT_APIKEY is None:
@@ -85,14 +78,4 @@ def ipinfo_results(domains):
         except Exception as e:
             print(str(e))
     return results
-    
-if __name__ == "__main__":
-    with open("ip_list_small.txt", "r") as file:
-        domain_list = []
-        for line in file:
-            domain_list.append(line)
-        queued_domains = vt_domain_scan(domain_list)
-        domain_report = vt_results(queued_domains)
-        for result in domain_report:
-            pprint(json.dumps(result, indent=4))
         
