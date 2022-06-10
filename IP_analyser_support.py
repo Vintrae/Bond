@@ -11,6 +11,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
 from pprint import pprint
+import time
 import json
 
 import IP_analyser
@@ -33,15 +34,18 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def analyse_button(text, tab, treeview):
+def analyse_button(text, tab, treeview, treeview2):
     ip_list = text.get("1.0", tk.END)
     ip_list = ip_list.split('\n')
     while '' in ip_list:
         ip_list.remove('')
     
     ip_list = [ip.replace("[.]", ".") for ip in ip_list]
-        
+    
+    # Get VirusTotal 
+    treeview.delete(*treeview.get_children())
     vt_queued_domains = ip_apis.vt_domain_scan(ip_list)
+    time.sleep(1)
     vt_domain_report = ip_apis.vt_results(vt_queued_domains)
     
     index = 0
@@ -58,8 +62,22 @@ def analyse_button(text, tab, treeview):
         index += 1
     treeview.tag_configure('red', background="#ff867d")
     treeview.tag_configure('green', background="#a4ff91")
+
+    # Get ipinfo
+    treeview2.delete(*treeview2.get_children())
+
+    ipinfo_data = ip_apis.ipinfo_results(ip_list)
+    index = 0
+    for result in ipinfo_data:
+        treeview2.insert('', "end", str(index), text=result['ip'])
+        for key in result:
+            if key != 'ip':
+                treeview2.insert(str(index), "end", text="{}".format(key.title()), values=("{}".format(result[key])))
+        index += 1
             
     tab.tab(1, state="normal")
+    tab.tab(2, state="normal")
+
 if __name__ == '__main__':
     IP_analyser.start_up()
 

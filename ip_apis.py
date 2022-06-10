@@ -21,6 +21,10 @@ VT_APIKEY = os.getenv('VT_API_KEY')
 if VT_APIKEY is None:
     sys.exit('VT_API_KEY not found in environment variables.')
 
+IPINFO_APIKEY = os.getenv('IPINFO_API_KEY')
+if IPINFO_APIKEY is None:
+    sys.exit('IPINFO_API_KEY not found in environment variables.')
+
 # Send scan request using VT API.    
 def vt_domain_scan(domains):
     results = []
@@ -62,8 +66,24 @@ def vt_results(domains):
             response = requests.post(url, params=params)
             results.append(response.json())
         except Exception as e:
+            print(str(e))    
+    return results
+
+# Send ipinfo request.
+def ipinfo_results(domains):
+    results = []
+    if not isinstance(domains, list):
+        domains = [domains]
+    for domain in domains:
+        #Prepare the request.
+        url = 'http://ipinfo.io/{}?token={}'.format(domain, IPINFO_APIKEY)
+
+        # Send request and print any errors.
+        try:
+            response = requests.get(url)
+            results.append(response.json())
+        except Exception as e:
             print(str(e))
-            
     return results
     
 if __name__ == "__main__":
