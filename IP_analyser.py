@@ -29,9 +29,7 @@ class Toplevel1:
         self.style = ttk.Style()
         if sys.platform == "win32":
             self.style.theme_use('winnative')
-        self.style.configure('.',background=_bgcolor)
-        self.style.configure('.',foreground=_fgcolor)
-        self.style.configure('.',font="TkDefaultFont")
+        self.style.configure('.',background=_bgcolor, foreground=_fgcolor, font="TkDefaultFont")
         self.style.map('.',background=
             [('selected', _compcolor), ('active',_ana2color)])
 
@@ -41,9 +39,7 @@ class Toplevel1:
         top.resizable(1,  1)
         top.title("Bond")
         top.wm_attributes('-toolwindow', 'True')
-        top.configure(background="#d9d9d9")
-        top.configure(highlightbackground="#d9d9d9")
-        top.configure(highlightcolor="black")
+        top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
         self.top = top
 
@@ -98,6 +94,18 @@ class Toplevel1:
                                     ("ClosetabNotebook.close", {"side":
                                         "left", "sticky": ''}),]})]})]})])
 
+        def treeview_sort_column(self, tv, col, reverse):
+            l = [(tv.set(k, col), k) for k in tv.get_children('')]
+            l.sort(reverse=reverse)
+
+            # rearrange items in sorted positions
+            for index, (val, k) in enumerate(l):
+                tv.move(k, '', index)
+
+            # reverse sort next time
+            tv.heading(col, command=lambda: \
+                       treeview_sort_column(self, tv, col, not reverse))
+
         self.style.map('ClosetabNotebook.Tab', background =
             [('selected', _bgcolor), ('active', _tabbg1),
             ('!active', _tabbg2)], foreground =
@@ -111,84 +119,62 @@ class Toplevel1:
         self.PNotebook1.add(self.PNotebook1_t1, padding=3)
         self.PNotebook1.tab(0, text='''IP List''', compound="left"
                 ,underline='''-1''', )
-        self.PNotebook1_t1.configure(background="#d9d9d9")
-        self.PNotebook1_t1.configure(highlightbackground="#d9d9d9")
-        self.PNotebook1_t1.configure(highlightcolor="black")
+        self.PNotebook1_t1.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
+        
         self.PNotebook1_t2 = tk.Frame(self.PNotebook1)
         self.PNotebook1.add(self.PNotebook1_t2, padding=3)
         self.PNotebook1.tab(1, text='''VirusTotal''', compound="left"
                 ,underline='''-1''', state="disabled")
-        self.PNotebook1_t2.configure(background="#d9d9d9")
-        self.PNotebook1_t2.configure(highlightbackground="#d9d9d9")
-        self.PNotebook1_t2.configure(highlightcolor="black")
+        self.PNotebook1_t2.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
+        
         self.PNotebook1_t3 = tk.Frame(self.PNotebook1)
         self.PNotebook1.add(self.PNotebook1_t3, padding=3)
         self.PNotebook1.tab(2, text='''ipinfo''', compound="left"
                       ,underline='''-1''', state="disabled")
-        self.PNotebook1_t3.configure(background="#d9d9d9")
-        self.PNotebook1_t3.configure(highlightbackground="#d9d9d9")
-        self.PNotebook1_t3.configure(highlightcolor="black")
+        self.PNotebook1_t3.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
+        
+        self.PNotebook1_t4 = tk.Frame(self.PNotebook1)
+        self.PNotebook1.add(self.PNotebook1_t4, padding=3)
+        self.PNotebook1.tab(3, text='''vpnapi''', compound="left"
+                ,underline='''-1''', state="disabled")
+        self.PNotebook1_t4.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
         self.Label1 = tk.Label(self.PNotebook1_t1)
         self.Label1.place(relx=0.033, rely=0.023, height=21, width=214)
-        self.Label1.configure(activebackground="#f9f9f9")
-        self.Label1.configure(anchor='w')
-        self.Label1.configure(background="#d9d9d9")
-        self.Label1.configure(compound='left')
-        self.Label1.configure(disabledforeground="#a3a3a3")
-        self.Label1.configure(foreground="#000000")
-        self.Label1.configure(highlightbackground="#d9d9d9")
-        self.Label1.configure(highlightcolor="black")
-        self.Label1.configure(text='''Enter list of IP addresses or browse file''')
+        self.Label1.configure(activebackground="#f9f9f9", anchor='w', background="#d9d9d9", compound='left', 
+                              disabledforeground="#a3a3a3", foreground="#000000", highlightbackground="#d9d9d9", 
+                              highlightcolor="black", text='''Enter list of IP addresses or browse file''')
 
         self.Text1 = tk.Text(self.PNotebook1_t1)
         self.Text1.place(relx=0.033, rely=0.093, relheight=0.847, relwidth=0.44)
-        self.Text1.configure(background="white")
-        self.Text1.configure(font="TkTextFont")
-        self.Text1.configure(foreground="black")
-        self.Text1.configure(highlightbackground="#d9d9d9")
-        self.Text1.configure(highlightcolor="black")
-        self.Text1.configure(insertbackground="black")
-        self.Text1.configure(selectbackground="#c4c4c4")
-        self.Text1.configure(selectforeground="black")
-        self.Text1.configure(wrap="word")
+        self.Text1.configure(background="white", font="TkTextFont", foreground="black", 
+                             highlightbackground="#d9d9d9", 
+                             highlightcolor="black", insertbackground="black", selectbackground="#c4c4c4", 
+                             selectforeground="black", wrap="word")
 
         self.Button1 = tk.Button(self.PNotebook1_t1)
         self.Button1.place(relx=0.617, rely=0.536, height=34, width=127)
-        self.Button1.configure(activebackground="beige")
-        self.Button1.configure(activeforeground="#000000")
-        self.Button1.configure(background="#d9d9d9")
-        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.PNotebook1, self.Scrolledtreeview1, self.Scrolledtreeview2))
-        self.Button1.configure(compound='left')
-        self.Button1.configure(disabledforeground="#a3a3a3")
-        self.Button1.configure(foreground="#000000")
-        self.Button1.configure(highlightbackground="#d9d9d9")
-        self.Button1.configure(highlightcolor="black")
+        self.Button1.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9")
+        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.PNotebook1, 
+                                                                                  self.Scrolledtreeview1, 
+                                                                                  self.Scrolledtreeview2, 
+                                                                                  self.Scrolledtreeview3))
+        self.Button1.configure(compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
+                               highlightbackground="#d9d9d9", highlightcolor="black")
         photo_location = "icons8-search-30.png"
         global _img0
         _img0 = tk.PhotoImage(file=photo_location)
-        self.Button1.configure(image=_img0)
-        self.Button1.configure(padx="10")
-        self.Button1.configure(pady="0")
-        self.Button1.configure(text='''Analyse''')
+        self.Button1.configure(image=_img0, padx="10", pady="0", text='''Analyse''')
 
         self.Button2 = tk.Button(self.PNotebook1_t1)
         self.Button2.place(relx=0.617, rely=0.371, height=34, width=127)
-        self.Button2.configure(activebackground="beige")
-        self.Button2.configure(activeforeground="#000000")
-        self.Button2.configure(background="#d9d9d9")
-        self.Button2.configure(compound='left')
-        self.Button2.configure(disabledforeground="#a3a3a3")
-        self.Button2.configure(foreground="#000000")
-        self.Button2.configure(highlightbackground="#d9d9d9")
-        self.Button2.configure(highlightcolor="black")
+        self.Button2.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
+                               compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
+                               highlightbackground="#d9d9d9", highlightcolor="black")
         photo_location = "icons8-folder-30.png"
         global _img1
         _img1 = tk.PhotoImage(file=photo_location)
-        self.Button2.configure(image=_img1)
-        self.Button2.configure(padx="15")
-        self.Button2.configure(pady="0")
-        self.Button2.configure(text='''Browse''')
+        self.Button2.configure(image=_img1, padx="15", pady="0", text='''Browse''')
 
         self.style.configure('Treeview',  font="TkDefaultFont")
         self.Scrolledtreeview1 = ScrolledTreeView(self.PNotebook1_t2)
@@ -196,36 +182,37 @@ class Toplevel1:
                 , relwidth=0.967)
         self.Scrolledtreeview1.configure(columns="Col1")
         # build_treeview_support starting.
-        self.Scrolledtreeview1.heading("#0",text="IP address")
-        self.Scrolledtreeview1.heading("#0",anchor="center")
-        self.Scrolledtreeview1.column("#0",width="280")
-        self.Scrolledtreeview1.column("#0",minwidth="20")
-        self.Scrolledtreeview1.column("#0",stretch="1")
-        self.Scrolledtreeview1.column("#0",anchor="w")
-        self.Scrolledtreeview1.heading("Col1",text="Results")
-        self.Scrolledtreeview1.heading("Col1",anchor="center")
-        self.Scrolledtreeview1.column("Col1",width="281")
-        self.Scrolledtreeview1.column("Col1",minwidth="20")
-        self.Scrolledtreeview1.column("Col1",stretch="1")
-        self.Scrolledtreeview1.column("Col1",anchor="w")
+        self.Scrolledtreeview1.heading("#0",text="IP address", anchor="center")
+        self.Scrolledtreeview1.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
+        self.Scrolledtreeview1.heading("Col1",text="Results", anchor="center")
+        self.Scrolledtreeview1.heading("Col1",command=lambda: \
+                     treeview_sort_column(self, self.Scrolledtreeview1, "Col1", False))
+        self.Scrolledtreeview1.column("Col1",width="281", minwidth="20", stretch="1", anchor="w")
 
         self.Scrolledtreeview2 = ScrolledTreeView(self.PNotebook1_t3)
         self.Scrolledtreeview2.place(relx=0.017, rely=0.023, relheight=0.944
                 , relwidth=0.958)
         self.Scrolledtreeview2.configure(columns="Col1")
         # build_treeview_support starting.
-        self.Scrolledtreeview2.heading("#0",text="IP address")
-        self.Scrolledtreeview2.heading("#0",anchor="center")
-        self.Scrolledtreeview2.column("#0",width="278")
-        self.Scrolledtreeview2.column("#0",minwidth="20")
-        self.Scrolledtreeview2.column("#0",stretch="1")
-        self.Scrolledtreeview2.column("#0",anchor="w")
-        self.Scrolledtreeview2.heading("Col1",text="Data")
-        self.Scrolledtreeview2.heading("Col1",anchor="center")
-        self.Scrolledtreeview2.column("Col1",width="278")
-        self.Scrolledtreeview2.column("Col1",minwidth="20")
-        self.Scrolledtreeview2.column("Col1",stretch="1")
-        self.Scrolledtreeview2.column("Col1",anchor="w")
+        self.Scrolledtreeview2.heading("#0",text="IP address", anchor="center")
+        self.Scrolledtreeview2.column("#0",width="278", minwidth="20", stretch="1", anchor="w")
+        self.Scrolledtreeview2.heading("Col1",text="Data", anchor="center")
+        self.Scrolledtreeview2.heading("Col1",command=lambda: \
+                     treeview_sort_column(self, self.Scrolledtreeview2, "Col1", False))
+        self.Scrolledtreeview2.column("Col1",width="278", minwidth="20", stretch="1", anchor="w")
+
+        self.Scrolledtreeview3 = ScrolledTreeView(self.PNotebook1_t4)
+        self.Scrolledtreeview3.place(relx=0.017, rely=0.023, relheight=0.944
+                , relwidth=0.967)
+        self.Scrolledtreeview3.configure(columns="Col1")
+        # build_treeview_support starting.
+        self.Scrolledtreeview3.heading("#0",text="IP address", anchor="center")
+        self.Scrolledtreeview3.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
+        self.Scrolledtreeview3.heading("Col1",text="Data", anchor="center")
+        self.Scrolledtreeview3.heading("Col1",command=lambda: \
+                     treeview_sort_column(self, self.Scrolledtreeview3, "Col1", False))
+        self.Scrolledtreeview3.column("Col1",width="281", minwidth="20", stretch="1", anchor="w")
+
         self.PNotebook1.bind('<Button-1>',_button_press)
         self.PNotebook1.bind('<ButtonRelease-1>',_button_release)
         self.PNotebook1.bind('<Motion>',_mouse_over)

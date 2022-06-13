@@ -34,7 +34,7 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def analyse_button(text, tab, treeview, treeview2):
+def analyse_button(text, tab, treeview, treeview2, treeview3):
     ip_list = text.get("1.0", tk.END)
     ip_list = ip_list.split('\n')
     while '' in ip_list:
@@ -42,10 +42,10 @@ def analyse_button(text, tab, treeview, treeview2):
     
     ip_list = [ip.replace("[.]", ".") for ip in ip_list]
     
-    # Get VirusTotal 
-    treeview.delete(*treeview.get_children())
+    # Get VirusTotal data.
+    treeview.delete(*treeview.get_children()) 
     vt_queued_domains = ip_apis.vt_domain_scan(ip_list)
-    time.sleep(1)
+    time.sleep(1) 
     vt_domain_report = ip_apis.vt_results(vt_queued_domains)
     
     index = 0
@@ -63,7 +63,9 @@ def analyse_button(text, tab, treeview, treeview2):
     treeview.tag_configure('red', background="#ff867d")
     treeview.tag_configure('green', background="#a4ff91")
 
-    # Get ipinfo
+    tab.tab(1, state="normal")
+
+    # Get ipinfo data.
     treeview2.delete(*treeview2.get_children())
 
     ipinfo_data = ip_apis.ipinfo_results(ip_list)
@@ -74,9 +76,31 @@ def analyse_button(text, tab, treeview, treeview2):
             if key != 'ip':
                 treeview2.insert(str(index), "end", text="{}".format(key.title()), values=("{}".format(result[key])))
         index += 1
-            
-    tab.tab(1, state="normal")
+
     tab.tab(2, state="normal")
+
+    # Get vpnapi data.
+    treeview3.delete(*treeview3.get_children())
+
+    vpnapi_data = ip_apis.vpnapi_results(ip_list)
+    index = 0
+    tag = None
+    for result in vpnapi_data:
+        for value in result['security']:
+            if value is True:
+                tag = 'yellow'
+        if tag is not None:
+            treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'])
+        else:
+            treeview3.insert('', "end", str(index), text=result['ip'])
+        for key in result:
+            if key != 'ip':
+                for subkey in result[key]:
+                    treeview3.insert(str(index), "end", text="{}".format(subkey.title()), values=("{}".format(result[key][subkey])))
+        index += 1
+    treeview3.tag_configure('yellow', background="#ebef70")        
+    
+    tab.tab(3, state="normal")
 
 if __name__ == '__main__':
     IP_analyser.start_up()

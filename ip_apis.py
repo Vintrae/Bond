@@ -9,13 +9,6 @@ import sys
 
 from pprint import pprint
 
-# Import list of IP addresses to analyse.
-# if len(sys.argv) < 2:
-    # sys.exit("No IP address or file supplied. Use" \
-    # "'python ip_analyser.py help' for more information.")
-# elif sys.argv[1].lower() == "help":
-    # print("Help is WIP.")
-
 # Import API keys as environment variables.
 VT_APIKEY = os.getenv('VT_API_KEY')
 if VT_APIKEY is None:
@@ -24,6 +17,10 @@ if VT_APIKEY is None:
 IPINFO_APIKEY = os.getenv('IPINFO_API_KEY')
 if IPINFO_APIKEY is None:
     sys.exit('IPINFO_API_KEY not found in environment variables.')
+
+VPNAPI_APIKEY = os.getenv('VPNAPI_API_KEY')
+if VPNAPI_APIKEY is None:
+    sys.exit('VPNAPI_API_KEY not found in environment variables.')
 
 # Send scan request using VT API.    
 def vt_domain_scan(domains):
@@ -69,7 +66,7 @@ def vt_results(domains):
             print(str(e))    
     return results
 
-# Send ipinfo request.
+# Fetch ipinfo data.
 def ipinfo_results(domains):
     results = []
     if not isinstance(domains, list):
@@ -85,14 +82,20 @@ def ipinfo_results(domains):
         except Exception as e:
             print(str(e))
     return results
-    
-if __name__ == "__main__":
-    with open("ip_list_small.txt", "r") as file:
-        domain_list = []
-        for line in file:
-            domain_list.append(line)
-        queued_domains = vt_domain_scan(domain_list)
-        domain_report = vt_results(queued_domains)
-        for result in domain_report:
-            pprint(json.dumps(result, indent=4))
-        
+
+# Fetch vpnapi data.
+def vpnapi_results(domains):
+    results = []
+    if not isinstance(domains, list):
+        domains = [domains]
+    for domain in domains:
+        #Prepare the request.
+        url = 'https://vpnapi.io/api/{}?key={}'.format(domain, VPNAPI_APIKEY)
+
+        # Send request and print any errors.
+        try:
+            response = requests.get(url)
+            results.append(response.json())
+        except Exception as e:
+            print(str(e))
+    return results    
