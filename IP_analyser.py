@@ -38,7 +38,6 @@ class Toplevel1:
         top.maxsize(4612, 1525)
         top.resizable(1,  1)
         top.title("Bond")
-        top.wm_attributes('-toolwindow', 'True')
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
         self.top = top
