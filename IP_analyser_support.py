@@ -14,6 +14,7 @@ from pprint import pprint
 import time
 import json
 
+
 import IP_analyser
 import ip_apis
 
@@ -26,6 +27,7 @@ def main(*args):
     global _top1, _w1
     _top1 = root
     _w1 = IP_analyser.Toplevel1(_top1)
+    root.iconbitmap("icon.ico")
     root.mainloop()
 
 def print(*args):
@@ -50,7 +52,8 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     
     index = 0
     for result in vt_domain_report:
-        treeview.insert('', "end", str(index), text=result['resource'], values=("{}/{}".format(result['positives'], result['total'])))
+        if 'resource' in result:
+            treeview.insert('', "end", str(index), text=result['resource'], values=("{}/{}".format(result['positives'], result['total'])))
         for scan in result['scans']:
             # Create tag for colouring purposes.
             tag = None
@@ -71,11 +74,12 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     ipinfo_data = ip_apis.ipinfo_results(ip_list)
     index = 0
     for result in ipinfo_data:
-        treeview2.insert('', "end", str(index), text=result['ip'])
-        for key in result:
-            if key != 'ip':
-                treeview2.insert(str(index), "end", text="{}".format(key.title()), values=("{}".format(result[key])))
-        index += 1
+        if 'ip' in result:
+            treeview2.insert('', "end", str(index), text=result['ip'], values=(result['country']))
+            for key in result:
+                if key != 'ip':
+                    treeview2.insert(str(index), "end", text="{}".format(key.title()), values=("{}".format(result[key])))
+            index += 1
 
     tab.tab(2, state="normal")
 
@@ -86,19 +90,20 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     index = 0
     tag = None
     for result in vpnapi_data:
-        for value in result['security']:
-            if result['security'][value] is True:
-                tag = 'yellow'
-        if tag is not None:
-            treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=("True"))
-            tag = None
-        else:
-            treeview3.insert('', "end", str(index), text=result['ip'])
-        for key in result:
-            if key != 'ip':
-                for subkey in result[key]:
-                    treeview3.insert(str(index), "end", text="{}".format(subkey.title()), values=("{}".format(result[key][subkey])))
-        index += 1
+        if 'security' in result:
+            for value in result['security']:
+                if result['security'][value] is True:
+                    tag = 'yellow'
+            if tag is not None:
+                treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=("True"))
+                tag = None
+            else:
+                treeview3.insert('', "end", str(index), text=result['ip'])
+            for key in result:
+                if key != 'ip':
+                    for subkey in result[key]:
+                        treeview3.insert(str(index), "end", text="{}".format(subkey.title()), values=("{}".format(result[key][subkey])))
+            index += 1
     treeview3.tag_configure('yellow', background="#ebef70")        
     
     tab.tab(3, state="normal")

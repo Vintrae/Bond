@@ -160,7 +160,7 @@ class Toplevel1:
                                                                                   self.Scrolledtreeview3))
         self.Button1.configure(compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black")
-        photo_location = "icons8-search-30.png"
+        photo_location = "search.png"
         global _img0
         _img0 = tk.PhotoImage(file=photo_location)
         self.Button1.configure(image=_img0, padx="10", pady="0", text='''Analyse''')
@@ -170,7 +170,7 @@ class Toplevel1:
         self.Button2.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black")
-        photo_location = "icons8-folder-30.png"
+        photo_location = "folder.png"
         global _img1
         _img1 = tk.PhotoImage(file=photo_location)
         self.Button2.configure(image=_img1, padx="15", pady="0", text='''Browse''')
