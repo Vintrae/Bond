@@ -28,6 +28,7 @@ def main(*args):
     _top1 = root
     _w1 = IP_analyser.Toplevel1(_top1)
     root.iconbitmap("icon.ico")
+    root.ip_data = []
     root.mainloop()
 
 def print(*args):
@@ -49,6 +50,7 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     vt_queued_domains = ip_apis.vt_domain_scan(ip_list)
     time.sleep(1) 
     vt_domain_report = ip_apis.vt_results(vt_queued_domains)
+    root.ip_data.append(vt_domain_report)
     
     index = 0
     for result in vt_domain_report:
@@ -72,6 +74,7 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     treeview2.delete(*treeview2.get_children())
 
     ipinfo_data = ip_apis.ipinfo_results(ip_list)
+    root.ip_data.append(ipinfo_data)
     index = 0
     for result in ipinfo_data:
         if 'ip' in result:
@@ -87,6 +90,7 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     treeview3.delete(*treeview3.get_children())
 
     vpnapi_data = ip_apis.vpnapi_results(ip_list)
+    root.ip_data.append(vpnapi_data)
     index = 0
     tag = None
     for result in vpnapi_data:
