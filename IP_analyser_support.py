@@ -10,10 +10,12 @@ import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
+from tkinter.filedialog import asksaveasfilename
 from pprint import pprint
 import time
 import json
 
+import pandas as pd
 
 import IP_analyser
 import ip_apis
@@ -113,6 +115,14 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     treeview3.tag_configure('yellow', background="#ebef70")        
     
     tab.tab(3, state="normal")
+
+def export_button(data):
+    file_name = tk.asksaveasfilename(confirmoverwrite=True)
+    if file_name:
+        for sheet in data:
+            for key in sheet:
+                if isinstance(sheet[key], dict):
+
 
 if __name__ == '__main__':
     IP_analyser.start_up()
