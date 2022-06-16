@@ -95,11 +95,13 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     tag = None
     for result in vpnapi_data:
         if 'security' in result:
+            sec_value = None
             for value in result['security']:
                 if result['security'][value] is True:
                     tag = 'yellow'
+                    sec_value = str(value)
             if tag is not None:
-                treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=("True"))
+                treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=(sec_value.title()))
                 tag = None
             else:
                 treeview3.insert('', "end", str(index), text=result['ip'])
