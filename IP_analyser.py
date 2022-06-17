@@ -152,28 +152,30 @@ class Toplevel1:
                              selectforeground="black", wrap="word")
 
         self.Button1 = tk.Button(self.PNotebook1_t1)
-        self.Button1.place(relx=0.617, rely=0.536, height=34, width=127)
-        self.Button1.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9")
+        self.Button1.place(relx=0.733, rely=0.766, height=34, width=127)
+        self.Button1.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
+                               compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
+                               highlightbackground="#d9d9d9", highlightcolor="black", padx="10", pady="0", 
+                               text='''Analyse''')
         self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.PNotebook1, 
                                                                                   self.Scrolledtreeview1, 
                                                                                   self.Scrolledtreeview2, 
                                                                                   self.Scrolledtreeview3))
-        self.Button1.configure(compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
-                               highlightbackground="#d9d9d9", highlightcolor="black")
-        photo_location = "search.png"
-        global _img0
-        _img0 = tk.PhotoImage(file=photo_location)
-        self.Button1.configure(image=_img0, padx="10", pady="0", text='''Analyse''')
 
         self.Button2 = tk.Button(self.PNotebook1_t1)
-        self.Button2.place(relx=0.617, rely=0.371, height=34, width=127)
+        self.Button2.place(relx=0.5, rely=0.766, height=34, width=127)
         self.Button2.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
-                               highlightbackground="#d9d9d9", highlightcolor="black")
-        photo_location = "folder.png"
-        global _img1
-        _img1 = tk.PhotoImage(file=photo_location)
-        self.Button2.configure(image=_img1, padx="15", pady="0", text='''Browse''')
+                               highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
+                               text='''Browse''')
+
+        self.Button3 = tk.Button(self.PNotebook1_t1)
+        self.Button3.place(relx=0.617, rely=0.858, height=34, width=127)
+        self.Button3.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
+                               compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
+                               highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
+                               text='''Export''')
+        self.Button3.configure(command=lambda: IP_analyser_support.export_button())
 
         self.style.configure('Treeview',  font="TkDefaultFont")
         self.Scrolledtreeview1 = ScrolledTreeView(self.PNotebook1_t2)

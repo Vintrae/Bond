@@ -6,6 +6,7 @@ import json
 import os
 import requests
 import sys
+import time
 
 from pprint import pprint
 
@@ -61,6 +62,7 @@ def vt_results(domains):
         # Send request and print any errors.
         try:
             response = requests.post(url, params=params)
+            time.sleep(0.1)
             results.append(response.json())
         except Exception as e:
             print(str(e))    
@@ -78,6 +80,7 @@ def ipinfo_results(domains):
         # Send request and print any errors.
         try:
             response = requests.get(url)
+            time.sleep(0.1)
             results.append(response.json())
         except Exception as e:
             print(str(e))
@@ -95,6 +98,7 @@ def vpnapi_results(domains):
         # Send request and print any errors.
         try:
             response = requests.get(url)
+            time.sleep(0.1)
             results.append(response.json())
         except Exception as e:
             print(str(e))

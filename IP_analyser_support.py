@@ -116,13 +116,21 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     
     tab.tab(3, state="normal")
 
-def export_button(data):
-    file_name = tk.asksaveasfilename(confirmoverwrite=True)
+def export_button():
+    file_name = asksaveasfilename(confirmoverwrite=True)
     if file_name:
-        for sheet in data:
-            for key in sheet:
-                if isinstance(sheet[key], dict):
+        sheet_index = 1
+        for sheet in root.ip_data:
+            sheet_data = pd.DataFrame()
+            for ip in sheet:
+                df = pd.json_normalize(ip)
+                sheet_data = pd.concat([sheet_data, df], ignore_index=True)
+            write_excel(file_name, 'Sheet {}'.format(sheet_index), sheet_data)
+            sheet_index += 1
 
+def write_excel(filename,sheetname,dataframe):
+    with pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists="replace") as writer: 
+            dataframe.to_excel(writer, sheet_name=sheetname,index=False)
 
 if __name__ == '__main__':
     IP_analyser.start_up()
