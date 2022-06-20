@@ -157,7 +157,8 @@ class Toplevel1:
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="10", pady="0", 
                                text='''Analyse''')
-        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.PNotebook1, 
+        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.Button3,
+                                                                                  self.PNotebook1, 
                                                                                   self.Scrolledtreeview1, 
                                                                                   self.Scrolledtreeview2, 
                                                                                   self.Scrolledtreeview3))
@@ -174,7 +175,7 @@ class Toplevel1:
         self.Button3.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
-                               text='''Export''')
+                               text='''Export''', state="disabled")
         self.Button3.configure(command=lambda: IP_analyser_support.export_button())
 
         self.style.configure('Treeview',  font="TkDefaultFont")

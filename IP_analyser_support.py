@@ -39,7 +39,7 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def analyse_button(text, tab, treeview, treeview2, treeview3):
+def analyse_button(text, button, tab, treeview, treeview2, treeview3):
     ip_list = text.get("1.0", tk.END)
     ip_list = ip_list.split('\n')
     while '' in ip_list:
@@ -115,9 +115,10 @@ def analyse_button(text, tab, treeview, treeview2, treeview3):
     treeview3.tag_configure('yellow', background="#ebef70")        
     
     tab.tab(3, state="normal")
+    button.configure(state="normal")
 
 def export_button():
-    file_name = asksaveasfilename(confirmoverwrite=True)
+    file_name = asksaveasfilename(confirmoverwrite=True, defaultextension=".xlsx", filetypes=(("Excel file", "*.xlsx"),("All Files", "*.*")))
     if file_name:
         sheet_index = 1
         for sheet in root.ip_data:
@@ -129,8 +130,12 @@ def export_button():
             sheet_index += 1
 
 def write_excel(filename,sheetname,dataframe):
-    with pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists="replace") as writer: 
-            dataframe.to_excel(writer, sheet_name=sheetname,index=False)
+    try:
+        with pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists="replace") as writer: 
+                dataframe.to_excel(writer, sheet_name=sheetname, index=False)
+    except:
+        with pd.ExcelWriter(filename, engine='openpyxl', mode='w') as writer: 
+                dataframe.to_excel(writer, sheet_name=sheetname, index=False)
 
 if __name__ == '__main__':
     IP_analyser.start_up()
