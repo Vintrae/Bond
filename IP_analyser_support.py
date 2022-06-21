@@ -20,6 +20,12 @@ import pandas as pd
 import IP_analyser
 import ip_apis
 
+colour_palette = {
+    'green':'#a4ff91',
+    'yellow':'#ebef70',
+    'red':'#ff867d'
+}
+
 def main(*args):
     '''Main entry point for the application.'''
     global root
@@ -39,7 +45,7 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def analyse_button(text, button, tab, treeview, treeview2, treeview3):
+def analyse_button(text, button, tab, treeview, treeview2, treeview3, treeview4):
     ip_list = text.get("1.0", tk.END)
     ip_list = ip_list.split('\n')
     while '' in ip_list:
@@ -67,8 +73,8 @@ def analyse_button(text, button, tab, treeview, treeview2, treeview3):
                 tag = 'green'
             treeview.insert(str(index), "end", tags=(tag), text=scan, values=(str(result['scans'][scan]['detected'])))
         index += 1
-    treeview.tag_configure('red', background="#ff867d")
-    treeview.tag_configure('green', background="#a4ff91")
+    treeview.tag_configure('red', background=colour_palette['red'])
+    treeview.tag_configure('green', background=colour_palette['green'])
 
     tab.tab(1, state="normal")
 
@@ -80,10 +86,13 @@ def analyse_button(text, button, tab, treeview, treeview2, treeview3):
     index = 0
     for result in ipinfo_data:
         if 'ip' in result:
-            treeview2.insert('', "end", str(index), text=result['ip'], values=(result['country']))
+            if 'country' in result:
+                treeview2.insert('', "end", str(index), text=result['ip'], values=(result['country']))
+            else:
+                treeview2.insert('', "end", str(index), text=result['ip'])
             for key in result:
                 if key != 'ip':
-                    treeview2.insert(str(index), "end", text="{}".format(key.title()), values=("{}".format(result[key])))
+                    treeview2.insert(str(index), "end", text="{}".format(key), values=("{}".format(result[key])))
             index += 1
 
     tab.tab(2, state="normal")
@@ -103,18 +112,50 @@ def analyse_button(text, button, tab, treeview, treeview2, treeview3):
                     tag = 'yellow'
                     sec_value = str(value)
             if tag is not None:
-                treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=(sec_value.title()))
+                treeview3.insert('', "end", str(index), tags=(tag), text=result['ip'], values=(sec_value))
                 tag = None
             else:
                 treeview3.insert('', "end", str(index), text=result['ip'])
             for key in result:
                 if key != 'ip':
                     for subkey in result[key]:
-                        treeview3.insert(str(index), "end", text="{}".format(subkey.title()), values=("{}".format(result[key][subkey])))
+                        treeview3.insert(str(index), "end", text="{}".format(subkey), values=("{}".format(result[key][subkey])))
             index += 1
-    treeview3.tag_configure('yellow', background="#ebef70")        
+    treeview3.tag_configure('yellow', background=colour_palette['yellow'])        
     
     tab.tab(3, state="normal")
+
+    # Get AbuseIPDB data.
+    treeview4.delete(*treeview4.get_children())
+
+    abuseipdb_data = ip_apis.abuseipdb_results(ip_list)
+    root.ip_data.append(abuseipdb_data)
+    index = 0
+    tag = None
+    for result in abuseipdb_data:
+        if 'data' in result and 'ipAddress' in result['data']:
+            confidence_score = None
+            score = result['data']['abuseConfidenceScore']
+            if score == 0:
+                tag = 'green'
+            elif score <= 50:
+                tag = 'yellow'
+            else:
+                tag = 'red'
+            confidence_score = str(score)
+            if tag is not None:
+                treeview4.insert('', "end", str(index), tags=(tag), text=result['data']['ipAddress'], values=(result['data']['abuseConfidenceScore']))
+                tag = None
+            else:
+                treeview4.insert('', "end", str(index), text=result['data']['ipAddress'])
+            for key in result['data']:
+                if key != 'ipAddress' and key != 'reports':
+                    treeview4.insert(str(index), "end", text="{}".format(key), values=("{}".format(result['data'][key])))
+            index += 1
+    treeview4.tag_configure('yellow', background=colour_palette['yellow'])        
+    
+    tab.tab(4, state="normal")
+
     button.configure(state="normal")
 
 def export_button():

@@ -138,6 +138,12 @@ class Toplevel1:
                 ,underline='''-1''', state="disabled")
         self.PNotebook1_t4.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
+        self.PNotebook1_t5 = tk.Frame(self.PNotebook1)
+        self.PNotebook1.add(self.PNotebook1_t5, padding=3)
+        self.PNotebook1.tab(4, text='''AbuseIPDB''', compound="left"
+                ,underline='''-1''', state="disabled")
+        self.PNotebook1_t5.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
+
         self.Label1 = tk.Label(self.PNotebook1_t1)
         self.Label1.place(relx=0.033, rely=0.023, height=21, width=214)
         self.Label1.configure(activebackground="#f9f9f9", anchor='w', background="#d9d9d9", compound='left', 
@@ -161,7 +167,8 @@ class Toplevel1:
                                                                                   self.PNotebook1, 
                                                                                   self.Scrolledtreeview1, 
                                                                                   self.Scrolledtreeview2, 
-                                                                                  self.Scrolledtreeview3))
+                                                                                  self.Scrolledtreeview3,
+                                                                                  self.Scrolledtreeview4))
 
         self.Button2 = tk.Button(self.PNotebook1_t1)
         self.Button2.place(relx=0.5, rely=0.766, height=34, width=127)
@@ -198,7 +205,7 @@ class Toplevel1:
         # build_treeview_support starting.
         self.Scrolledtreeview2.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview2.column("#0",width="278", minwidth="20", stretch="1", anchor="w")
-        self.Scrolledtreeview2.heading("Col1",text="Data", anchor="center")
+        self.Scrolledtreeview2.heading("Col1",text="Country", anchor="center")
         self.Scrolledtreeview2.heading("Col1",command=lambda: \
                      treeview_sort_column(self, self.Scrolledtreeview2, "Col1", False))
         self.Scrolledtreeview2.column("Col1",width="278", minwidth="20", stretch="1", anchor="w")
@@ -210,10 +217,22 @@ class Toplevel1:
         # build_treeview_support starting.
         self.Scrolledtreeview3.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview3.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
-        self.Scrolledtreeview3.heading("Col1",text="Data", anchor="center")
+        self.Scrolledtreeview3.heading("Col1",text="Security Measure", anchor="center")
         self.Scrolledtreeview3.heading("Col1",command=lambda: \
                      treeview_sort_column(self, self.Scrolledtreeview3, "Col1", False))
         self.Scrolledtreeview3.column("Col1",width="281", minwidth="20", stretch="1", anchor="w")
+
+        self.Scrolledtreeview4 = ScrolledTreeView(self.PNotebook1_t5)
+        self.Scrolledtreeview4.place(relx=0.017, rely=0.023, relheight=0.944
+                , relwidth=0.967)
+        self.Scrolledtreeview4.configure(columns="Col1")
+        # build_treeview_support starting.
+        self.Scrolledtreeview4.heading("#0",text="IP address", anchor="center")
+        self.Scrolledtreeview4.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
+        self.Scrolledtreeview4.heading("Col1",text="Abuse Confidence Score", anchor="center")
+        self.Scrolledtreeview4.heading("Col1",command=lambda: \
+                     treeview_sort_column(self, self.Scrolledtreeview4, "Col1", False))
+        self.Scrolledtreeview4.column("Col1",width="281", minwidth="20", stretch="1", anchor="w")
 
         self.PNotebook1.bind('<Button-1>',_button_press)
         self.PNotebook1.bind('<ButtonRelease-1>',_button_release)

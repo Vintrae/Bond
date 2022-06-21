@@ -23,6 +23,10 @@ VPNAPI_APIKEY = os.getenv('VPNAPI_API_KEY')
 if VPNAPI_APIKEY is None:
     sys.exit('VPNAPI_API_KEY not found in environment variables.')
 
+ABUSEIPDB_APIKEY = os.getenv('ABUSEIPDB_API_KEY')
+if ABUSEIPDB_APIKEY is None:
+    sys.exit('ABUSEIPDB_API_KEY not found in environment variables.')
+
 # Send scan request using VT API.    
 def vt_domain_scan(domains):
     results = []
@@ -98,6 +102,32 @@ def vpnapi_results(domains):
         # Send request and print any errors.
         try:
             response = requests.get(url)
+            time.sleep(0.1)
+            results.append(response.json())
+        except Exception as e:
+            print(str(e))
+    return results    
+
+# Fetch AbuseIPDB data.
+def abuseipdb_results(domains):
+    results = []
+    if not isinstance(domains, list):
+        domains = [domains]
+    for domain in domains:
+        #Prepare the request.
+        url = 'https://api.abuseipdb.com/api/v2/check'
+        params = {
+            'ipAddress': '{}'.format(domain),
+            'maxAgeInDays': '90'
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Key': '{}'.format(ABUSEIPDB_APIKEY)
+        }
+
+        # Send request and print any errors.
+        try:
+            response = requests.get(url, headers=headers, params=params)
             time.sleep(0.1)
             results.append(response.json())
         except Exception as e:
