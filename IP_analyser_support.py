@@ -10,7 +10,7 @@ import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
-from tkinter.filedialog import asksaveasfilename
+from tkinter.filedialog import asksaveasfilename, askopenfilename
 from pprint import pprint
 import time
 import json
@@ -45,13 +45,33 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def analyse_button(text, button, tab, treeview, treeview2, treeview3, treeview4):
-    ip_list = text.get("1.0", tk.END)
-    ip_list = ip_list.split('\n')
+def browse_button(ip_list):
+    internal_list = []
+    file_name = askopenfilename(defaultextension=".txt", filetypes=(("Text File", "*.txt"),("All Files", "*.*")))
+    with open(file_name, 'r') as f:
+        for line in f:
+            stripped_line = line.strip()
+            internal_list.append(stripped_line.replace("[.]", "."))
+    internal_list = [ip.replace('"', "") for ip in internal_list]
+    internal_list = [ip.replace(",", "") for ip in internal_list]
     while '' in ip_list:
-        ip_list.remove('')
-    
-    ip_list = [ip.replace("[.]", ".") for ip in ip_list]
+            ip_list.remove('')
+    for element in internal_list:
+        ip_list.append(element)
+
+
+def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview4):
+    if not parent.ip_list:
+        ip_list = parent.Text1.get("1.0", tk.END)
+        ip_list = ip_list.split('\n')
+        ip_list = [ip.replace("[.]", ".") for ip in ip_list]
+        ip_list = [ip.replace('"', "") for ip in ip_list]
+        ip_list = [ip.replace(",", "") for ip in ip_list]
+        while '' in ip_list:
+            ip_list.remove('')
+    else:
+        ip_list = parent.ip_list.copy()
+        parent.ip_list = []
     
     # Get VirusTotal data.
     treeview.delete(*treeview.get_children()) 

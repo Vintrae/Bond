@@ -41,6 +41,7 @@ class Toplevel1:
         top.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
         self.top = top
+        self.ip_list = []
 
         global _images
         _images = (
@@ -163,7 +164,7 @@ class Toplevel1:
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="10", pady="0", 
                                text='''Analyse''')
-        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self.Text1, self.Button3,
+        self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self, self.Button3,
                                                                                   self.PNotebook1, 
                                                                                   self.Scrolledtreeview1, 
                                                                                   self.Scrolledtreeview2, 
@@ -176,6 +177,7 @@ class Toplevel1:
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
                                text='''Browse''')
+        self.Button2.configure(command=lambda: IP_analyser_support.browse_button(self.ip_list))
 
         self.Button3 = tk.Button(self.PNotebook1_t1)
         self.Button3.place(relx=0.617, rely=0.858, height=34, width=127)
