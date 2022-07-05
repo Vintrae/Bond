@@ -146,24 +146,36 @@ class Toplevel1:
         self.PNotebook1_t5.configure(background="#d9d9d9", highlightbackground="#d9d9d9", highlightcolor="black")
 
         self.Label1 = tk.Label(self.PNotebook1_t1)
-        self.Label1.place(relx=0.033, rely=0.023, height=21, width=214)
+        self.Label1.place(relx=0.083, rely=0.023, height=21, width=214)
         self.Label1.configure(activebackground="#f9f9f9", anchor='w', background="#d9d9d9", compound='left', 
                               disabledforeground="#a3a3a3", foreground="#000000", highlightbackground="#d9d9d9", 
                               highlightcolor="black", text='''Enter list of IP addresses or browse file''')
 
+        self.Label2 = tk.Label(self.PNotebook1_t1)
+        self.Label2.place(relx=0.567, rely=0.023, height=21, width=164)
+        self.Label2.configure(activebackground="#f9f9f9", anchor='w', background="#d9d9d9", compound='left', 
+                              disabledforeground="#a3a3a3", foreground="#000000", highlightbackground="#d9d9d9", 
+                              highlightcolor="black", text='''List of imported IP addresses''')
+
+        self.Label3 = tk.Label(self.PNotebook1_t1)
+        self.Label3.place(relx=0.017, rely=0.928, height=21, width=154)
+        self.Label3.configure(activebackground="#f9f9f9", anchor='w', background="#d9d9d9", compound='left', 
+                              disabledforeground="#a3a3a3", foreground="#000000", highlightbackground="#d9d9d9", 
+                              highlightcolor="black", text="")
+
         self.Text1 = tk.Text(self.PNotebook1_t1)
-        self.Text1.place(relx=0.033, rely=0.093, relheight=0.847, relwidth=0.44)
+        self.Text1.place(relx=0.083, rely=0.07, relheight=0.708, relwidth=0.34)
         self.Text1.configure(background="white", font="TkTextFont", foreground="black", 
                              highlightbackground="#d9d9d9", 
                              highlightcolor="black", insertbackground="black", selectbackground="#c4c4c4", 
                              selectforeground="black", wrap="word")
 
         self.Button1 = tk.Button(self.PNotebook1_t1)
-        self.Button1.place(relx=0.733, rely=0.766, height=34, width=127)
+        self.Button1.place(relx=0.517, rely=0.812, height=34, width=127)
         self.Button1.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="10", pady="0", 
-                               text='''Analyse''')
+                               text='''Analyse''', state="disabled")
         self.Button1.configure(command=lambda: IP_analyser_support.analyse_button(self, self.Button3,
                                                                                   self.PNotebook1, 
                                                                                   self.Scrolledtreeview1, 
@@ -172,27 +184,39 @@ class Toplevel1:
                                                                                   self.Scrolledtreeview4))
 
         self.Button2 = tk.Button(self.PNotebook1_t1)
-        self.Button2.place(relx=0.5, rely=0.766, height=34, width=127)
+        self.Button2.place(relx=0.267, rely=0.812, height=34, width=127)
         self.Button2.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
                                text='''Browse''')
-        self.Button2.configure(command=lambda: IP_analyser_support.browse_button(self.ip_list))
+        self.Button2.configure(command=lambda: IP_analyser_support.browse_button(self))
 
         self.Button3 = tk.Button(self.PNotebook1_t1)
-        self.Button3.place(relx=0.617, rely=0.858, height=34, width=127)
+        self.Button3.place(relx=0.75, rely=0.812, height=34, width=127)
         self.Button3.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
                                compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
                                text='''Export''', state="disabled")
-        self.Button3.configure(command=lambda: IP_analyser_support.export_button())
+        self.Button3.configure(command=lambda: IP_analyser_support.export_button(self.Label3))
+
+        self.Button4 = tk.Button(self.PNotebook1_t1)
+        self.Button4.place(relx=0.033, rely=0.812, height=34, width=127)
+        self.Button4.configure(activebackground="beige", activeforeground="#000000", background="#d9d9d9", 
+                               compound='left', disabledforeground="#a3a3a3", foreground="#000000", 
+                               highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
+                               text='''Import from text''')
+        self.Button4.configure(command=lambda: IP_analyser_support.import_button(self))
 
         self.style.configure('Treeview',  font="TkDefaultFont")
+        self.Scrolledtreeview0 = ScrolledTreeView(self.PNotebook1_t1)
+        self.Scrolledtreeview0.place(relx=0.567, rely=0.07, relheight=0.712, relwidth=0.35)
+        self.Scrolledtreeview0.heading("#0",text="Tree", anchor="center")
+        self.Scrolledtreeview0.column("#0",width="191", minwidth="191", stretch="1", anchor="w")
+
         self.Scrolledtreeview1 = ScrolledTreeView(self.PNotebook1_t2)
         self.Scrolledtreeview1.place(relx=0.017, rely=0.023, relheight=0.947
                 , relwidth=0.967)
         self.Scrolledtreeview1.configure(columns="Col1")
-        # build_treeview_support starting.
         self.Scrolledtreeview1.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview1.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
         self.Scrolledtreeview1.heading("Col1",text="Results", anchor="center")
@@ -204,7 +228,6 @@ class Toplevel1:
         self.Scrolledtreeview2.place(relx=0.017, rely=0.023, relheight=0.944
                 , relwidth=0.958)
         self.Scrolledtreeview2.configure(columns="Col1")
-        # build_treeview_support starting.
         self.Scrolledtreeview2.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview2.column("#0",width="278", minwidth="20", stretch="1", anchor="w")
         self.Scrolledtreeview2.heading("Col1",text="Country", anchor="center")
@@ -216,7 +239,6 @@ class Toplevel1:
         self.Scrolledtreeview3.place(relx=0.017, rely=0.023, relheight=0.944
                 , relwidth=0.967)
         self.Scrolledtreeview3.configure(columns="Col1")
-        # build_treeview_support starting.
         self.Scrolledtreeview3.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview3.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
         self.Scrolledtreeview3.heading("Col1",text="Security Measure", anchor="center")
@@ -228,7 +250,6 @@ class Toplevel1:
         self.Scrolledtreeview4.place(relx=0.017, rely=0.023, relheight=0.944
                 , relwidth=0.967)
         self.Scrolledtreeview4.configure(columns="Col1")
-        # build_treeview_support starting.
         self.Scrolledtreeview4.heading("#0",text="IP address", anchor="center")
         self.Scrolledtreeview4.column("#0",width="280", minwidth="20", stretch="1", anchor="w")
         self.Scrolledtreeview4.heading("Col1",text="Abuse Confidence Score", anchor="center")

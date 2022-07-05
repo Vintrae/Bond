@@ -45,33 +45,46 @@ def print(*args):
         print ('another arg:', arg)
     sys.stdout.flush()
     
-def browse_button(ip_list):
-    internal_list = []
+def browse_button(parent):
+    parent.ip_list = []
     file_name = askopenfilename(defaultextension=".txt", filetypes=(("Text File", "*.txt"),("All Files", "*.*")))
     with open(file_name, 'r') as f:
         for line in f:
             stripped_line = line.strip()
-            internal_list.append(stripped_line.replace("[.]", "."))
-    internal_list = [ip.replace('"', "") for ip in internal_list]
-    internal_list = [ip.replace(",", "") for ip in internal_list]
-    while '' in ip_list:
-            ip_list.remove('')
-    for element in internal_list:
-        ip_list.append(element)
+            parent.ip_list.append(stripped_line.replace("[.]", "."))
+    parent.ip_list = [ip.replace('"', "") for ip in parent.ip_list]
+    parent.ip_list = [ip.replace(",", "") for ip in parent.ip_list]
+    while '' in parent.ip_list:
+            parent.ip_list.remove('')
+    update_imported(parent)
 
+def import_button(parent):
+    parent.ip_list = parent.Text1.get("1.0", tk.END)
+    parent.ip_list = parent.ip_list.split('\n')
+    parent.ip_list = [ip.replace("[.]", ".") for ip in parent.ip_list]
+    parent.ip_list = [ip.replace('"', "") for ip in parent.ip_list]
+    parent.ip_list = [ip.replace(",", "") for ip in parent.ip_list]
+    while '' in parent.ip_list:
+        parent.ip_list.remove('')
+    update_imported(parent)
+
+def export_button(label):
+    label.configure(text="")
+    file_name = asksaveasfilename(confirmoverwrite=True, defaultextension=".xlsx", filetypes=(("Excel file", "*.xlsx"),("All Files", "*.*")))
+    if file_name:
+        sheet_index = 1
+        for sheet in root.ip_data:
+            sheet_data = pd.DataFrame()
+            for ip in sheet:
+                df = pd.json_normalize(ip)
+                sheet_data = pd.concat([sheet_data, df], ignore_index=True)
+            write_excel(file_name, 'Sheet {}'.format(sheet_index), sheet_data)
+            sheet_index += 1
+        label.configure(text="Successfully exported data.")
 
 def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview4):
-    if not parent.ip_list:
-        ip_list = parent.Text1.get("1.0", tk.END)
-        ip_list = ip_list.split('\n')
-        ip_list = [ip.replace("[.]", ".") for ip in ip_list]
-        ip_list = [ip.replace('"', "") for ip in ip_list]
-        ip_list = [ip.replace(",", "") for ip in ip_list]
-        while '' in ip_list:
-            ip_list.remove('')
-    else:
-        ip_list = parent.ip_list.copy()
-        parent.ip_list = []
+    ip_list = parent.ip_list.copy()
+    root.ip_data = []
     
     # Get VirusTotal data.
     treeview.delete(*treeview.get_children()) 
@@ -177,18 +190,7 @@ def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview
     tab.tab(4, state="normal")
 
     button.configure(state="normal")
-
-def export_button():
-    file_name = asksaveasfilename(confirmoverwrite=True, defaultextension=".xlsx", filetypes=(("Excel file", "*.xlsx"),("All Files", "*.*")))
-    if file_name:
-        sheet_index = 1
-        for sheet in root.ip_data:
-            sheet_data = pd.DataFrame()
-            for ip in sheet:
-                df = pd.json_normalize(ip)
-                sheet_data = pd.concat([sheet_data, df], ignore_index=True)
-            write_excel(file_name, 'Sheet {}'.format(sheet_index), sheet_data)
-            sheet_index += 1
+    parent.Label3.configure(text="Analysis complete.")
 
 def write_excel(filename,sheetname,dataframe):
     try:
@@ -197,6 +199,20 @@ def write_excel(filename,sheetname,dataframe):
     except:
         with pd.ExcelWriter(filename, engine='openpyxl', mode='w') as writer: 
                 dataframe.to_excel(writer, sheet_name=sheetname, index=False)
+
+def update_imported(parent):
+    parent.treeview0.delete(*parent.treeview0.get_children())
+    if parent.ip_list:
+        for ip in parent.ip_list:
+            parent.Scrolledtreeview0.insert('', "end", text=ip)
+        parent.Label3.configure(text="Successfully imported IPs.")
+        parent.Button1.configure(state="normal")
+        parent.Button3.configure(state="normal")
+    else:
+        parent.Label3.configure(text="No IPs found.")
+        parent.Button1.configure(state="disabled")
+        parent.Button3.configure(state="disabled")
+    
 
 if __name__ == '__main__':
     IP_analyser.start_up()
