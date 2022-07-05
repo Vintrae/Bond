@@ -201,18 +201,15 @@ def write_excel(filename,sheetname,dataframe):
                 dataframe.to_excel(writer, sheet_name=sheetname, index=False)
 
 def update_imported(parent):
-    parent.treeview0.delete(*parent.treeview0.get_children())
+    parent.Scrolledtreeview0.delete(*parent.Scrolledtreeview0.get_children())
     if parent.ip_list:
         for ip in parent.ip_list:
             parent.Scrolledtreeview0.insert('', "end", text=ip)
         parent.Label3.configure(text="Successfully imported IPs.")
         parent.Button1.configure(state="normal")
-        parent.Button3.configure(state="normal")
     else:
         parent.Label3.configure(text="No IPs found.")
-        parent.Button1.configure(state="disabled")
-        parent.Button3.configure(state="disabled")
-    
+        parent.Button1.configure(state="disabled")    
 
 if __name__ == '__main__':
     IP_analyser.start_up()

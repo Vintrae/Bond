@@ -208,9 +208,8 @@ class Toplevel1:
         self.Button4.configure(command=lambda: IP_analyser_support.import_button(self))
 
         self.style.configure('Treeview',  font="TkDefaultFont")
-        self.Scrolledtreeview0 = ScrolledTreeView(self.PNotebook1_t1)
+        self.Scrolledtreeview0 = ScrolledTreeView(self.PNotebook1_t1, show="tree")
         self.Scrolledtreeview0.place(relx=0.567, rely=0.07, relheight=0.712, relwidth=0.35)
-        self.Scrolledtreeview0.heading("#0",text="Tree", anchor="center")
         self.Scrolledtreeview0.column("#0",width="191", minwidth="191", stretch="1", anchor="w")
 
         self.Scrolledtreeview1 = ScrolledTreeView(self.PNotebook1_t2)
