@@ -86,6 +86,7 @@ def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview
     ip_list = parent.ip_list.copy()
     root.ip_data = []
     parent.total_scanned = 0
+    parent.total_todo = len(parent.ip_list) * 5
     
     # Get VirusTotal data.
     treeview.delete(*treeview.get_children()) 
@@ -214,8 +215,8 @@ def update_imported(parent):
 
 def update_progress(parent):
     parent.total_scanned += 1
-    parent.TProgressBar1['value'] = parent.total_scanned / parent.total_requests * 100
-    parent.update_idletasks()
+    parent.TProgressbar1['value'] = parent.total_scanned / parent.total_todo * 100
+    root.update_idletasks()
 
 if __name__ == '__main__':
     IP_analyser.start_up()

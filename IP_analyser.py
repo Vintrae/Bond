@@ -43,7 +43,7 @@ class Toplevel1:
         self.top = top
         self.ip_list = []
         self.total_scanned = 0
-        self.total_requests = len(self.ip_list) * 5
+        self.total_todo = 0
 
         global _images
         _images = (
