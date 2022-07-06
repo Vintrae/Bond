@@ -10,6 +10,8 @@ import time
 
 from pprint import pprint
 
+import IP_analyser_support
+
 # Import API keys as environment variables.
 VT_APIKEY = os.getenv('VT_API_KEY')
 if VT_APIKEY is None:
@@ -28,7 +30,7 @@ if ABUSEIPDB_APIKEY is None:
     sys.exit('ABUSEIPDB_API_KEY not found in environment variables.')
 
 # Send scan request using VT API.    
-def vt_domain_scan(domains):
+def vt_domain_scan(domains, parent):
     results = []
     if not isinstance(domains, list):
         domains = [domains]
@@ -42,11 +44,9 @@ def vt_domain_scan(domains):
             response = requests.post(url, params=params)
             
             # Process response to the request.
-            if response.status_code != 200:
-                print('{} status code returned for {}.'.format(str(response.status_code), domain))
-            else:
+            if response.status_code == 200:
                 results.append(domain)
-                print('{}/{} domains queued successfully.'.format(len(results), len(domains)), end='\r')
+                IP_analyser_support.update_progress(parent)
         except Exception as e:
             print(str(e))
           
@@ -54,7 +54,7 @@ def vt_domain_scan(domains):
     return results
 
 # Fetch VT API scan results.
-def vt_results(domains):
+def vt_results(domains, parent):
     results = []
     if not isinstance(domains, list):
         domains = [domains]
@@ -68,12 +68,13 @@ def vt_results(domains):
             response = requests.post(url, params=params)
             time.sleep(0.1)
             results.append(response.json())
+            IP_analyser_support.update_progress(parent)
         except Exception as e:
             print(str(e))    
     return results
 
 # Fetch ipinfo data.
-def ipinfo_results(domains):
+def ipinfo_results(domains, parent):
     results = []
     if not isinstance(domains, list):
         domains = [domains]
@@ -86,12 +87,13 @@ def ipinfo_results(domains):
             response = requests.get(url)
             time.sleep(0.1)
             results.append(response.json())
+            IP_analyser_support.update_progress(parent)
         except Exception as e:
             print(str(e))
     return results
 
 # Fetch vpnapi data.
-def vpnapi_results(domains):
+def vpnapi_results(domains, parent):
     results = []
     if not isinstance(domains, list):
         domains = [domains]
@@ -104,12 +106,13 @@ def vpnapi_results(domains):
             response = requests.get(url)
             time.sleep(0.1)
             results.append(response.json())
+            IP_analyser_support.update_progress(parent)
         except Exception as e:
             print(str(e))
     return results    
 
 # Fetch AbuseIPDB data.
-def abuseipdb_results(domains):
+def abuseipdb_results(domains, parent):
     results = []
     if not isinstance(domains, list):
         domains = [domains]
@@ -130,6 +133,7 @@ def abuseipdb_results(domains):
             response = requests.get(url, headers=headers, params=params)
             time.sleep(0.1)
             results.append(response.json())
+            IP_analyser_support.update_progress(parent)
         except Exception as e:
             print(str(e))
     return results    

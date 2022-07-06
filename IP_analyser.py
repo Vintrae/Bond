@@ -42,6 +42,8 @@ class Toplevel1:
 
         self.top = top
         self.ip_list = []
+        self.total_scanned = 0
+        self.total_requests = len(self.ip_list) * 5
 
         global _images
         _images = (
@@ -206,6 +208,9 @@ class Toplevel1:
                                highlightbackground="#d9d9d9", highlightcolor="black", padx="15", pady="0", 
                                text='''Import from text''')
         self.Button4.configure(command=lambda: IP_analyser_support.import_button(self))
+
+        self.TProgressbar1 = ttk.Progressbar(self.PNotebook1_t1)
+        self.TProgressbar1.place(relx=0.817, rely=0.928, relwidth=0.167, relheight=0.0, height=22)
 
         self.style.configure('Treeview',  font="TkDefaultFont")
         self.Scrolledtreeview0 = ScrolledTreeView(self.PNotebook1_t1, show="tree")

@@ -85,12 +85,13 @@ def export_button(label):
 def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview4):
     ip_list = parent.ip_list.copy()
     root.ip_data = []
+    parent.total_scanned = 0
     
     # Get VirusTotal data.
     treeview.delete(*treeview.get_children()) 
-    vt_queued_domains = ip_apis.vt_domain_scan(ip_list)
+    vt_queued_domains = ip_apis.vt_domain_scan(ip_list, parent)
     time.sleep(1) 
-    vt_domain_report = ip_apis.vt_results(vt_queued_domains)
+    vt_domain_report = ip_apis.vt_results(vt_queued_domains, parent)
     root.ip_data.append(vt_domain_report)
     
     index = 0
@@ -114,7 +115,7 @@ def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview
     # Get ipinfo data.
     treeview2.delete(*treeview2.get_children())
 
-    ipinfo_data = ip_apis.ipinfo_results(ip_list)
+    ipinfo_data = ip_apis.ipinfo_results(ip_list, parent)
     root.ip_data.append(ipinfo_data)
     index = 0
     for result in ipinfo_data:
@@ -133,7 +134,7 @@ def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview
     # Get vpnapi data.
     treeview3.delete(*treeview3.get_children())
 
-    vpnapi_data = ip_apis.vpnapi_results(ip_list)
+    vpnapi_data = ip_apis.vpnapi_results(ip_list, parent)
     root.ip_data.append(vpnapi_data)
     index = 0
     tag = None
@@ -161,7 +162,7 @@ def analyse_button(parent, button, tab, treeview, treeview2, treeview3, treeview
     # Get AbuseIPDB data.
     treeview4.delete(*treeview4.get_children())
 
-    abuseipdb_data = ip_apis.abuseipdb_results(ip_list)
+    abuseipdb_data = ip_apis.abuseipdb_results(ip_list, parent)
     root.ip_data.append(abuseipdb_data)
     index = 0
     tag = None
@@ -210,6 +211,11 @@ def update_imported(parent):
     else:
         parent.Label3.configure(text="No IPs found.")
         parent.Button1.configure(state="disabled")    
+
+def update_progress(parent):
+    parent.total_scanned += 1
+    parent.TProgressBar1['value'] = parent.total_scanned / parent.total_requests * 100
+    parent.update_idletasks()
 
 if __name__ == '__main__':
     IP_analyser.start_up()
