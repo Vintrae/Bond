@@ -6,6 +6,7 @@
 #    Jun 08, 2022 12:30:34 AM BST  platform: Windows NT
 #    Jun 08, 2022 12:38:28 AM BST  platform: Windows NT
 
+import os
 import sys
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -35,7 +36,7 @@ def main(*args):
     global _top1, _w1
     _top1 = root
     _w1 = IP_analyser.Toplevel1(_top1)
-    root.iconbitmap("icon.ico")
+    root.iconbitmap(resource_path("icon.ico"))
     root.ip_data = []
     root.mainloop()
 
@@ -217,6 +218,14 @@ def update_progress(parent):
     parent.total_scanned += 1
     parent.TProgressbar1['value'] = parent.total_scanned / parent.total_todo * 100
     root.update_idletasks()
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
 
 if __name__ == '__main__':
     IP_analyser.start_up()
